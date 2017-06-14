@@ -17,7 +17,7 @@ RUN echo "gem: --no-document" > /etc/gemrc
 RUN gem install inspec -v ${INSPEC_VERSION}
 RUN gem install awspec -v ${AWSPEC_VERSION}
 
-COPY terraform_${TERRAFORM_VERSION}_linux_amd64.zip /
+COPY packages/terraform_${TERRAFORM_VERSION}_linux_amd64.zip /
 RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
