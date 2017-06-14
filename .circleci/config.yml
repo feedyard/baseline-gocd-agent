@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/baseline-gocd-agent
     environment:
-      LIBRARY: feedyard
+      LIBRARY: quay.io/feedyard
       CONTAINER_NAME: baseline-gocd-agent
       VERSION: 3.6
       BASH_ENV: .circlerc
@@ -35,5 +35,5 @@ jobs:
           name: deploy to quay
           command: |
             docker login -u $QUAY_USER -p $QUAY_TOKEN quay.io
-            docker push quay.io/$LIBRARY/$CONTAINER_NAME:$VERSION.$CIRCLE_BUILD_NUM
-            docker push quay.io/$LIBRARY/$CONTAINER_NAME:latest
+            docker push $LIBRARY/$CONTAINER_NAME:$VERSION.$CIRCLE_BUILD_NUM
+            docker push $LIBRARY/$CONTAINER_NAME:latest
