@@ -6,11 +6,11 @@ import sys
 
 @task
 def bl(ctx):
-    build(ctx, 'feedyard', 'baseline_gocd_agent', 'latest')
+    build(ctx, 'feedyard', 'baseline-gocd-agent', 'latest')
 
 @task
 def tl(ctx):
-    test(ctx, 'feedyard', 'baseline_gocd_agent', 'latest')
+    test(ctx, 'feedyard', 'baseline-gocd-agent', 'latest')
 
 
 @task
