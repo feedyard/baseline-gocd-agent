@@ -1,14 +1,26 @@
 FROM gocd/gocd-agent-alpine-3.5:v17.5.0
 
-# (ref) https://github.com/hashicorp/docker-hub-images/blob/master/terraform/Dockerfile-light
 ENV TERRAFORM_VERSION=0.9.8
-ENV TERRAFORM_SHA256SUM=f951885f4e15deb4cf66f3b199964e3e74a0298bb46c9fe42e105df2ebcf3d16
+ENV INSPEC_VERSION=1.27.0
+ENV AWSPEC_VERSION=0.77.1
 
-RUN apk add --update git curl openssh && \
-    curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    echo "${TERRAFORM_SHA256SUM}  terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
-    sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
-    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+RUN apk add --update --no-cache git openssh bash bash-doc bash-completion \
+    python3 ruby ruby-bundler ruby-dev g++ libffi-dev musl-dev make
+
+RUN python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    rm -r /root/.cache
+
+RUN echo "gem: --no-document" > /etc/gemrc
+RUN gem install inspec -v ${INSPEC_VERSION}
+RUN gem install awspec -v ${AWSPEC_VERSION}
+
+COPY terraform_${TERRAFORM_VERSION}_linux_amd64.zip /
+RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
     rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
+HEALTHCHECK NONE
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

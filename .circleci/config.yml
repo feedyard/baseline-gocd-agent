@@ -1,0 +1,42 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: ~/baseline-gocd-agent
+    environment:
+      LIBRARY: feedyard
+      CONTAINER_NAME: baseline-gocd-agent
+      VERSION: 3.6
+      BASH_ENV: .circlerc
+    docker:
+      - image: feedyard/circleci-docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: confirm Docker
+          command: 'docker info'
+      - run:
+          name: decrypt secrets
+          command: 'openssl aes-256-cbc -d -in secrets.ci -out .circlerc -k $KEY'
+      - run:
+          name: build image
+          command: 'invoke build $LIBRARY $CONTAINER_NAME latest'
+          # command: 'docker build -t $LIBRARY/$CONTAINER_NAME:latest .'
+#      - run:
+#          name: tag with build version
+#          command: 'docker tag $LIBRARY/$CONTAINER_NAME:latest $LIBRARY/$CONTAINER_NAME:$VERSION.$CIRCLE_BUILD_NUM'
+      - run:
+          name: configuration tests
+          command: 'invoke test $LIBRARY $CONTAINER_NAME latest'
+#          command: |
+#            inspec exec profiles/cis-docker                                 # cis oriented evaluation
+#            docker run -it -d $LIBRARY/$CONTAINER_NAME:latest ash           # run an instance to test configuration
+#            CID="$(docker run -it -d feedyard/circleci-docker:latest ash)"  # get container ID
+#            inspec exec profiles/circleci-docker/ -t docker://$CID          # test configuration
+#      - deploy:
+#          name: deploy to docker hub
+#          command: |
+#            docker login -u $QUAY_USER -p $QUAY_TOKEN
+#            docker push $LIBRARY/$CONTAINER_NAME:$VERSION.$CIRCLE_BUILD_NUM
+#            docker push $LIBRARY/$CONTAINER_NAME:latest

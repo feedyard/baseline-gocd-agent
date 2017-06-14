@@ -1,0 +1,9 @@
+name: baseline_gocd_agent
+title: starter image for use as GoCD agent
+summary: Verify packages and docker-engine health
+version: 1.0.0
+maintainer: ncheneweth
+copyright: ncheneweth
+license: Apache-2.0
+supports:
+  - os-family: alpine
