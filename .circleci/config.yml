@@ -7,7 +7,7 @@ jobs:
       LIBRARY: feedyard
       CONTAINER_NAME: baseline-gocd-agent
       VERSION: 3.6
-      BASH_ENV: .circlerci
+      BASH_ENV: .circlerc
     docker:
       - image: feedyard/circleci-docker
     steps:
@@ -29,7 +29,6 @@ jobs:
           name: configuration tests
           command: |
             inspec exec profiles/cis-docker                                 # cis oriented evaluation
-            # docker run -it -d $LIBRARY/$CONTAINER_NAME:latest ash           # run an instance to test configuration
             CID="$(docker run -it -d $LIBRARY/$CONTAINER_NAME:latest ash)"  # get container ID
             inspec exec profiles/$CONTAINER_NAME/ -t docker://$CID          # test configuration
       - deploy:
