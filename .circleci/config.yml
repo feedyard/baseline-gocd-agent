@@ -35,5 +35,5 @@ jobs:
           name: deploy to quay
           command: |
             docker login -u $QUAY_USER -p $QUAY_TOKEN quay.io
-            docker push $LIBRARY/$CONTAINER_NAME:$VERSION.$CIRCLE_BUILD_NUM
-            docker push $LIBRARY/$CONTAINER_NAME:latest
+            docker push quay.io/$LIBRARY/$CONTAINER_NAME:$VERSION.$CIRCLE_BUILD_NUM
+            docker push quay.io/$LIBRARY/$CONTAINER_NAME:latest
