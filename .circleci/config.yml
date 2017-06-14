@@ -31,7 +31,7 @@ jobs:
             inspec exec profiles/cis-docker                                 # cis oriented evaluation
             # docker run -it -d $LIBRARY/$CONTAINER_NAME:latest ash           # run an instance to test configuration
             CID="$(docker run -it -d $LIBRARY/$CONTAINER_NAME:latest ash)"  # get container ID
-            inspec exec profiles/circleci-docker/ -t docker://$CID          # test configuration
+            inspec exec profiles/$CONTAINER_NAME/ -t docker://$CID          # test configuration
       - deploy:
           name: deploy to quay
           command: |
