@@ -7,7 +7,7 @@ jobs:
       LIBRARY: feedyard
       CONTAINER_NAME: baseline-gocd-agent
       VERSION: 3.6
-      BASH_ENV: .circlerc
+      BASH_ENV: .circlerci
     docker:
       - image: feedyard/circleci-docker
     steps:
