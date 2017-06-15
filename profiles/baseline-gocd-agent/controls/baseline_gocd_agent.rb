@@ -89,3 +89,12 @@ control 'terraform version' do
     its('stdout') { should include ('0.9.8') }
   end
 end
+
+control 'invoke version' do
+  impact 1.0
+  title 'confirm invoke version installed'
+  desc 'confirm version reported by invoke matches the desired version'
+  describe command('invoke --version') do
+    its('stdout') { should include ('0.18') }
+  end
+end
